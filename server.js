@@ -96,21 +96,13 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server after database initialized
-async function startServer() {
-  try {
-    await initDatabase();
-    app.listen(PORT, () => {
-      console.log(`=======================================================`);
-      console.log(`🐾 PawHaven Pet Adoption Portal Server Running!`);
-      console.log(`🌐 Web App:      http://localhost:${PORT}`);
-      console.log(`🔐 Admin Portal: http://localhost:${PORT}/admin`);
-      console.log(`🐾 Browse Pets:  http://localhost:${PORT}/pets`);
-      console.log(`=======================================================`);
-    });
-  } catch (error) {
-    console.error('Failed to start server:', error);
-    process.exit(1);
-  }
-}
+let initialized = false;
 
-startServer();
+module.exports = async (req, res) => {
+  if (!initialized) {
+    await initDatabase();
+    initialized = true;
+  }
+
+  return app(req, res);
+};
