@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adopter Dashboard | PawHaven Pet Adoption Portal</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+      <a class="navbar-brand navbar-brand-custom" href="/">
+        <div class="brand-icon">
+          <i class="bi bi-heart-pulse-fill"></i>
+        </div>
+        <span>Paw<span style="color: var(--accent);">Haven</span></span>
+      </a>
+      
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="/pets">Adopt a Pet</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom active" href="/dashboard">My Dashboard</a></li>
+        </ul>
+        <div id="navbar-auth-section">
+          <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Main View -->
+  <div class="container dashboard-wrapper">
+    
+    <!-- Welcome Header -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+      <div>
+        <h2 class="fw-bold text-dark mb-1" id="dash-welcome-title">Welcome Back, Adopter!</h2>
+        <p class="text-secondary small mb-0">Track your adoption applications, status updates, and notifications.</p>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="/pets" class="btn btn-primary-custom py-2 px-3">
+          <i class="bi bi-search"></i> Browse Pets
+        </a>
+      </div>
+    </div>
+
+    <!-- 4 KPI Stat Boxes (Matches System Architecture & Specifications) -->
+    <div class="row g-3 mb-4">
+      
+      <div class="col-sm-6 col-lg-3">
+        <div class="dash-kpi-card">
+          <div class="kpi-icon-wrap kpi-primary">
+            <i class="bi bi-file-earmark-text-fill"></i>
+          </div>
+          <div>
+            <div class="kpi-value" id="kpi-total-apps">0</div>
+            <div class="kpi-title">Total Applications</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-lg-3">
+        <div class="dash-kpi-card">
+          <div class="kpi-icon-wrap kpi-success">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <div>
+            <div class="kpi-value text-success" id="kpi-approved-apps">0</div>
+            <div class="kpi-title">Approved Applications</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-lg-3">
+        <div class="dash-kpi-card">
+          <div class="kpi-icon-wrap kpi-accent">
+            <i class="bi bi-hourglass-split"></i>
+          </div>
+          <div>
+            <div class="kpi-value text-warning" id="kpi-pending-apps">0</div>
+            <div class="kpi-title">Pending Review</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-lg-3">
+        <div class="dash-kpi-card">
+          <div class="kpi-icon-wrap kpi-info">
+            <i class="bi bi-heart-fill"></i>
+          </div>
+          <div>
+            <div class="kpi-value text-info" id="kpi-avail-pets">0</div>
+            <div class="kpi-title">Available Pets</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Main Tabs: Applications, Notifications, Profile -->
+    <ul class="nav nav-tabs border-bottom mb-4" id="dashboardTabs" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link active fw-bold py-2 px-3" id="tab-apps-btn" data-bs-toggle="tab" data-bs-target="#tab-apps" type="button">
+          <i class="bi bi-folder2-open me-1"></i> My Adoption Applications
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link fw-bold py-2 px-3 position-relative" id="tab-notifs-btn" data-bs-toggle="tab" data-bs-target="#tab-notifs" type="button">
+          <i class="bi bi-bell me-1"></i> Notifications
+          <span id="tab-notif-count" class="badge rounded-pill bg-danger ms-1" style="display:none;">0</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link fw-bold py-2 px-3" id="tab-profile-btn" data-bs-toggle="tab" data-bs-target="#tab-profile" type="button">
+          <i class="bi bi-person-gear me-1"></i> My Profile
+        </button>
+      </li>
+    </ul>
+
+    <!-- Tab Contents -->
+    <div class="tab-content" id="dashboardTabsContent">
+      
+      <!-- TAB 1: My Applications -->
+      <div class="tab-pane fade show active" id="tab-apps" role="tabpanel">
+        <div class="glass-card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">Application Tracking</h5>
+            <button class="btn btn-sm btn-outline-secondary" onclick="loadApplications()">
+              <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light small text-uppercase">
+                <tr>
+                  <th>Pet</th>
+                  <th>Applied Date</th>
+                  <th>Home / Occupation</th>
+                  <th>Status</th>
+                  <th>Shelter Feedback</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="applications-table-body">
+                <tr>
+                  <td colspan="6" class="text-center py-4">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                    <span class="ms-2 text-muted small">Loading applications...</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Notifications -->
+      <div class="tab-pane fade" id="tab-notifs" role="tabpanel">
+        <div class="glass-card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">System Notifications & Alerts</h5>
+            <button class="btn btn-sm btn-outline-primary" onclick="markAllNotificationsAsRead()">
+              <i class="bi bi-check2-all"></i> Mark All as Read
+            </button>
+          </div>
+
+          <div id="notifications-list" class="rounded-3 border overflow-hidden">
+            <!-- Dynamically loaded -->
+            <div class="text-center py-4 text-muted small">
+              <div class="spinner-border spinner-border-sm text-primary" role="status"></div> Loading notifications...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: Profile Settings -->
+      <div class="tab-pane fade" id="tab-profile" role="tabpanel">
+        <div class="glass-card p-4 max-w-700">
+          <h5 class="fw-bold mb-3 border-bottom pb-2">Edit Adopter Profile</h5>
+          <form id="profile-form">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="prof-name" class="form-label-custom">Full Name</label>
+                <input type="text" class="form-control form-control-custom" id="prof-name" required>
+              </div>
+              <div class="col-md-6">
+                <label for="prof-email" class="form-label-custom">Email Address</label>
+                <input type="email" class="form-control form-control-custom bg-light" id="prof-email" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="prof-phone" class="form-label-custom">Phone Number</label>
+                <input type="tel" class="form-control form-control-custom" id="prof-phone">
+              </div>
+              <div class="col-md-6">
+                <label for="prof-role" class="form-label-custom">Account Role</label>
+                <input type="text" class="form-control form-control-custom bg-light" id="prof-role" readonly>
+              </div>
+              <div class="col-12">
+                <label for="prof-address" class="form-label-custom">Physical Address</label>
+                <textarea class="form-control form-control-custom" id="prof-address" rows="2"></textarea>
+              </div>
+
+              <div class="col-12 mt-4">
+                <h6 class="fw-bold text-dark border-top pt-3 mb-2">Change Password (Optional)</h6>
+              </div>
+              <div class="col-md-6">
+                <label for="prof-current-pwd" class="form-label-custom">Current Password</label>
+                <input type="password" class="form-control form-control-custom" id="prof-current-pwd" placeholder="Leave empty to keep current">
+              </div>
+              <div class="col-md-6">
+                <label for="prof-new-pwd" class="form-label-custom">New Password</label>
+                <input type="password" class="form-control form-control-custom" id="prof-new-pwd" placeholder="New password">
+              </div>
+
+              <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-primary-custom" id="profile-save-btn">
+                  <i class="bi bi-save me-1"></i> Update Profile
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Application Detail Modal -->
+  <div class="modal fade" id="appDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-content-custom">
+        <div class="modal-header modal-header-custom">
+          <h5 class="modal-title fw-bold" id="modalPetName">Application Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4" id="modalAppContent">
+          <!-- Dynamically populated -->
+        </div>
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    // Protect route: require logged in user
+    if (!App.isAuthenticated()) {
+      window.location.href = '/login?redirect=/dashboard';
+    }
+
+    let userApplications = [];
+
+    async function initDashboard() {
+      const user = App.getUser();
+      if (user) {
+        document.getElementById('dash-welcome-title').innerText = `Welcome, ${user.fullName}!`;
+        document.getElementById('prof-name').value = user.fullName || '';
+        document.getElementById('prof-email').value = user.email || '';
+        document.getElementById('prof-phone').value = user.phone || '';
+        document.getElementById('prof-address').value = user.address || '';
+        document.getElementById('prof-role').value = user.role || 'User';
+      }
+
+      await Promise.all([
+        loadApplications(),
+        loadAvailablePetsCount(),
+        loadNotifications()
+      ]);
+    }
+
+    async function loadAvailablePetsCount() {
+      try {
+        const res = await App.fetchApi('/api/pets?status=Available');
+        document.getElementById('kpi-avail-pets').innerText = res.count || 0;
+      } catch (e) {}
+    }
+
+    async function loadApplications() {
+      const tbody = document.getElementById('applications-table-body');
+      try {
+        const res = await App.fetchApi('/api/applications/my');
+        userApplications = res.data || [];
+
+        // Calculate KPI values
+        const total = userApplications.length;
+        const approved = userApplications.filter(a => a.status === 'Approved').length;
+        const pending = userApplications.filter(a => a.status === 'Pending').length;
+
+        document.getElementById('kpi-total-apps').innerText = total;
+        document.getElementById('kpi-approved-apps').innerText = approved;
+        document.getElementById('kpi-pending-apps').innerText = pending;
+
+        if (userApplications.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="text-center py-5 text-muted">
+                <i class="bi bi-folder2-open fs-2 d-block mb-2 text-secondary"></i>
+                <div class="fw-bold">No Adoption Applications Yet</div>
+                <div class="small">Explore our available pets and begin an application today!</div>
+                <a href="/pets" class="btn btn-primary-custom btn-sm mt-3">Browse Pets</a>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = userApplications.map((app, idx) => `
+          <tr>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <img src="${app.pet_image}" alt="${app.pet_name}" class="rounded-2" style="width: 48px; height: 48px; object-fit: cover;" onerror="this.src='/images/pets/default.jpg'">
+                <div>
+                  <div class="fw-bold text-dark">${app.pet_name}</div>
+                  <div class="text-muted small">${app.pet_species} • ${app.pet_breed}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="small fw-semibold text-dark">${new Date(app.applied_at).toLocaleDateString()}</div>
+              <div class="text-muted" style="font-size: 0.75rem;">${new Date(app.applied_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+            </td>
+            <td>
+              <div class="small text-dark fw-medium">${app.occupation || 'N/A'}</div>
+              <div class="text-muted text-truncate" style="max-width: 180px; font-size: 0.75rem;">${app.house_type || 'N/A'}</div>
+            </td>
+            <td>
+              <span class="badge ${
+                app.status === 'Approved' ? 'bg-success' : app.status === 'Pending' ? 'bg-warning text-dark' : 'bg-danger'
+              } p-2 px-3 rounded-pill fw-bold">
+                ${app.status === 'Approved' ? '<i class="bi bi-check-circle-fill me-1"></i>' : app.status === 'Pending' ? '<i class="bi bi-clock-fill me-1"></i>' : '<i class="bi bi-x-circle-fill me-1"></i>'}
+                ${app.status}
+              </span>
+            </td>
+            <td>
+              ${
+                app.admin_notes
+                  ? `<div class="small text-dark fst-italic">"${app.admin_notes}"</div>`
+                  : `<span class="text-muted small">Under initial review</span>`
+              }
+            </td>
+            <td>
+              <button class="btn btn-outline-secondary btn-sm rounded-pill" onclick="viewAppModal(${idx})">
+                <i class="bi bi-eye"></i> Details
+              </button>
+            </td>
+          </tr>
+        `).join('');
+
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4">${err.message}</td></tr>`;
+      }
+    }
+
+    function viewAppModal(index) {
+      const app = userApplications[index];
+      if (!app) return;
+
+      document.getElementById('modalPetName').innerText = `Application for ${app.pet_name}`;
+      document.getElementById('modalAppContent').innerHTML = `
+        <div class="d-flex align-items-center gap-3 mb-3 p-3 bg-light rounded-3">
+          <img src="${app.pet_image}" class="rounded-3" style="width: 60px; height: 60px; object-fit: cover;" onerror="this.src='/images/pets/default.jpg'">
+          <div>
+            <div class="fw-bold">${app.pet_name} (${app.pet_breed})</div>
+            <div class="small text-muted">${app.pet_gender} • ${app.pet_age} ${app.pet_age === 1 ? 'yr' : 'yrs'}</div>
+            <span class="badge ${app.status === 'Approved' ? 'bg-success' : app.status === 'Pending' ? 'bg-warning text-dark' : 'bg-danger'} mt-1">${app.status}</span>
+          </div>
+        </div>
+
+        <div class="row g-2 small mb-3">
+          <div class="col-6"><strong>Occupation:</strong> ${app.occupation}</div>
+          <div class="col-6"><strong>Family Members:</strong> ${app.family_members}</div>
+          <div class="col-12"><strong>Residence:</strong> ${app.house_type}</div>
+          <div class="col-12"><strong>Pet Experience:</strong> ${app.pet_experience}</div>
+          <div class="col-12"><strong>Reason for Adoption:</strong> ${app.reason}</div>
+        </div>
+
+        ${
+          app.admin_notes
+            ? `<div class="p-3 rounded-2 bg-info bg-opacity-10 border border-info border-opacity-25 small">
+                <strong>Shelter Review Notes:</strong><br>${app.admin_notes}
+               </div>`
+            : ''
+        }
+      `;
+
+      new bootstrap.Modal(document.getElementById('appDetailModal')).show();
+    }
+
+    async function loadNotifications() {
+      const container = document.getElementById('notifications-list');
+      try {
+        const res = await App.fetchApi('/api/notifications');
+        const notifs = res.data || [];
+        const unreadCount = notifs.filter(n => !n.is_read).length;
+
+        const countBadge = document.getElementById('tab-notif-count');
+        if (unreadCount > 0) {
+          countBadge.innerText = unreadCount;
+          countBadge.style.display = 'inline-block';
+        } else {
+          countBadge.style.display = 'none';
+        }
+
+        if (notifs.length === 0) {
+          container.innerHTML = `<div class="text-center py-4 text-muted small">No notifications yet.</div>`;
+          return;
+        }
+
+        container.innerHTML = notifs.map(n => `
+          <div class="notification-item ${n.is_read ? '' : 'unread'}" id="notif-item-${n.notification_id}">
+            <div class="notification-icon bg-${n.type === 'success' ? 'success' : n.type === 'danger' ? 'danger' : n.type === 'warning' ? 'warning' : 'primary'} text-white">
+              <i class="bi ${n.type === 'success' ? 'bi-check-lg' : n.type === 'danger' ? 'bi-x-lg' : n.type === 'warning' ? 'bi-exclamation' : 'bi-bell'}"></i>
+            </div>
+            <div class="flex-grow-1">
+              <div class="small text-dark fw-medium">${n.message}</div>
+              <div class="text-muted" style="font-size: 0.75rem;">${new Date(n.created_at).toLocaleString()}</div>
+            </div>
+            ${
+              !n.is_read
+                ? `<button class="btn btn-sm btn-link text-decoration-none small text-primary p-0" onclick="markNotificationRead(${n.notification_id})">Mark Read</button>`
+                : ''
+            }
+          </div>
+        `).join('');
+
+      } catch (e) {
+        container.innerHTML = `<div class="text-danger small p-3">Failed to load notifications.</div>`;
+      }
+    }
+
+    async function markNotificationRead(id) {
+      try {
+        await App.fetchApi(`/api/notifications/${id}/read`, { method: 'PUT' });
+        loadNotifications();
+        App.pollUnreadNotifications();
+      } catch (e) {}
+    }
+
+    async function markAllNotificationsAsRead() {
+      try {
+        await App.fetchApi('/api/notifications/read-all', { method: 'PUT' });
+        App.showToast('All notifications marked as read.', 'success');
+        loadNotifications();
+        App.pollUnreadNotifications();
+      } catch (e) {}
+    }
+
+    // Update Profile form submission
+    document.getElementById('profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('profile-save-btn');
+      btn.disabled = true;
+
+      try {
+        const body = {
+          full_name: document.getElementById('prof-name').value.trim(),
+          phone: document.getElementById('prof-phone').value.trim(),
+          address: document.getElementById('prof-address').value.trim(),
+          current_password: document.getElementById('prof-current-pwd').value,
+          new_password: document.getElementById('prof-new-pwd').value
+        };
+
+        const res = await App.fetchApi('/api/auth/profile', {
+          method: 'PUT',
+          body: JSON.stringify(body)
+        });
+
+        // Update local session
+        const user = App.getUser();
+        user.fullName = body.full_name;
+        user.phone = body.phone;
+        user.address = body.address;
+        localStorage.setItem('pawhaven_user', JSON.stringify(user));
+        App.updateNavbar();
+
+        App.showToast(res.message || 'Profile updated successfully!', 'success');
+        btn.disabled = false;
+      } catch (err) {
+        btn.disabled = false;
+        App.showToast(err.message || 'Failed to update profile.', 'danger');
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+  </script>
+</body>
+</html>

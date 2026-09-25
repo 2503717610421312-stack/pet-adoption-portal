@@ -1,0 +1,31 @@
+{
+  "name": "pet-adoption-portal",
+  "version": "1.0.0",
+  "description": "Full-Stack Pet Adoption Portal with Node.js, Express, MySQL, Bootstrap 5, JWT, and Multer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "pet-adoption",
+    "express",
+    "mysql",
+    "jwt",
+    "multer",
+    "bootstrap5"
+  ],
+  "author": "PawHaven Engineering Team",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.41.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "multer-storage-cloudinary": "^4.0.0",
+    "pg": "^8.23.0"
+  }
+}

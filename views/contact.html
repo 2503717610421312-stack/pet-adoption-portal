@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | PawHaven Pet Adoption Portal</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+      <a class="navbar-brand navbar-brand-custom" href="/">
+        <div class="brand-icon">
+          <i class="bi bi-heart-pulse-fill"></i>
+        </div>
+        <span>Paw<span style="color: var(--accent);">Haven</span></span>
+      </a>
+      
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="/"><i class="bi bi-house-door me-1"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="/pets"><i class="bi bi-search-heart me-1"></i>Adopt a Pet</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="/about"><i class="bi bi-info-circle me-1"></i>About Us</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom active" href="/contact"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+        </ul>
+        <div id="navbar-auth-section">
+          <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="py-5 bg-white border-bottom">
+    <div class="container text-center py-3">
+      <span class="badge bg-success bg-opacity-10 text-success p-2 px-3 rounded-pill fw-bold mb-3">Get In Touch</span>
+      <h1 class="fw-bold text-dark mb-2">We’d Love to Hear From You</h1>
+      <p class="text-secondary small max-w-600 mx-auto">Have inquiries regarding pet adoption, visiting our center, volunteering, or donating? Reach out to our compassionate team.</p>
+    </div>
+  </header>
+
+  <!-- Contact & FAQ Section -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-5">
+        
+        <!-- Left: Contact Form -->
+        <div class="col-lg-7">
+          <div class="glass-card p-4 p-md-5">
+            <h4 class="fw-bold text-dark mb-3">Send Us a Direct Message</h4>
+            <form id="contact-form">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label-custom">Your Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-custom" id="c-name" required placeholder="Full name">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label-custom">Email Address <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control form-control-custom" id="c-email" required placeholder="email@example.com">
+                </div>
+                <div class="col-12">
+                  <label class="form-label-custom">Subject <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-custom" id="c-subject" required placeholder="Adoption question, visitation, etc.">
+                </div>
+                <div class="col-12">
+                  <label class="form-label-custom">Message <span class="text-danger">*</span></label>
+                  <textarea class="form-control form-control-custom" id="c-msg" rows="4" required placeholder="How can our shelter team assist you?"></textarea>
+                </div>
+                <div class="col-12 mt-4">
+                  <button type="submit" class="btn btn-primary-custom py-2 px-4" id="c-btn">
+                    <span>Send Message</span> <i class="bi bi-send-fill ms-1"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Shelter Location & Hours -->
+        <div class="col-lg-5">
+          <div class="glass-card p-4 mb-4">
+            <h5 class="fw-bold text-dark mb-3">Shelter Adoption Center</h5>
+            <div class="d-flex align-items-start gap-3 mb-3">
+              <div class="rounded-circle bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; flex-shrink: 0;">
+                <i class="bi bi-geo-alt-fill fs-5"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-1">Physical Address</h6>
+                <p class="small text-secondary mb-0">100 Animal Rescue Blvd, Suite 400<br>Springfield, IL 62701</p>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-start gap-3 mb-3">
+              <div class="rounded-circle bg-success bg-opacity-10 text-success p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; flex-shrink: 0;">
+                <i class="bi bi-telephone-fill fs-5"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-1">Telephone & Emergency Hotline</h6>
+                <p class="small text-secondary mb-0">Main: +1 (555) 019-2834<br>24/7 Rescue Line: +1 (555) 019-9999</p>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-start gap-3">
+              <div class="rounded-circle bg-warning bg-opacity-10 text-warning p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; flex-shrink: 0;">
+                <i class="bi bi-clock-fill fs-5"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-1">Public Visiting & Meet-and-Greet</h6>
+                <p class="small text-secondary mb-0">
+                  Monday – Saturday: 9:00 AM – 6:00 PM<br>
+                  Sunday: 10:00 AM – 4:00 PM
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick FAQ Accordion -->
+          <div class="glass-card p-4">
+            <h5 class="fw-bold text-dark mb-3">Frequently Asked Questions</h5>
+            <div class="accordion accordion-flush" id="faqAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed fw-semibold small" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                    How long does application review take?
+                  </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body small text-secondary">
+                    Our shelter staff typically processes applications within 24 to 48 business hours. You will receive an instant notification in your dashboard when a determination is made.
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed fw-semibold small" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                    Are the adoption fees inclusive of vaccines?
+                  </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body small text-secondary">
+                    Yes! Every adopted animal comes fully vaccinated, dewormed, spayed or neutered, and microchipped at no extra surprise cost.
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed fw-semibold small" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                    Can I meet the pet before finalizing?
+                  </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body small text-secondary">
+                    Absolutely! Once your application is marked Approved, an adoption coordinator will schedule a meet-and-greet in our visitation playrooms.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer-custom">
+    <div class="container text-center small text-secondary">
+      <p class="mb-0">© 2026 PawHaven Pet Adoption Portal. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('c-btn');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Sending...`;
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Send Message</span> <i class="bi bi-send-fill ms-1"></i>`;
+        document.getElementById('contact-form').reset();
+        App.showToast('Thank you for reaching out! A shelter team member will get back to you shortly.', 'success');
+      }, 700);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PawHaven | Find Your Forever Companion - Pet Adoption Portal</title>
+  <meta name="description" content="PawHaven connects rescue animals with loving families. Browse dogs, cats, rabbits, and birds ready for adoption today.">
+  
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+      <a class="navbar-brand navbar-brand-custom" href="/">
+        <div class="brand-icon">
+          <i class="bi bi-heart-pulse-fill"></i>
+        </div>
+        <span>Paw<span style="color: var(--accent);">Haven</span></span>
+      </a>
+      
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom active" href="/"><i class="bi bi-house-door me-1"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="/pets"><i class="bi bi-search-heart me-1"></i>Adopt a Pet</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="/about"><i class="bi bi-info-circle me-1"></i>About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="/contact"><i class="bi bi-envelope me-1"></i>Contact</a>
+          </li>
+        </ul>
+
+        <!-- Dynamic Auth Section -->
+        <div id="navbar-auth-section">
+          <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <div class="hero-badge">
+            <i class="bi bi-shield-check-fill text-success"></i>
+            100% Vet-Checked & Rescued Pets
+          </div>
+          <h1 class="hero-title">
+            Every Pet Deserves a <span>Loving Home.</span>
+          </h1>
+          <p class="lead text-secondary mb-4" style="font-size: 1.15rem;">
+            Welcome to PawHaven, your premier ethical pet adoption platform. We connect rescued dogs, cats, rabbits, and birds with caring individuals and families across the community.
+          </p>
+          <div class="d-flex flex-wrap gap-3 mb-5">
+            <a href="/pets" class="btn btn-primary-custom py-3 px-4">
+              <i class="bi bi-search"></i> Browse Available Pets
+            </a>
+            <a href="/about" class="btn btn-outline-custom py-3 px-4">
+              <i class="bi bi-play-circle"></i> How It Works
+            </a>
+          </div>
+
+          <!-- Quick Stats Highlights -->
+          <div class="row g-3">
+            <div class="col-4">
+              <div class="stat-box">
+                <div class="stat-number" id="hero-stat-pets">8+</div>
+                <div class="stat-label">Pets Waiting</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-box">
+                <div class="stat-number text-success" id="hero-stat-adopted">250+</div>
+                <div class="stat-label">Adopted</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-box">
+                <div class="stat-number text-warning">99%</div>
+                <div class="stat-label">Happy Tails</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="hero-img-card">
+            <img src="/images/pets/dog-golden.jpg" alt="Adoptable Golden Retriever" id="hero-pet-image">
+            <div class="floating-pill">
+              <div class="rounded-circle bg-success text-white p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                <i class="bi bi-check2-circle fs-5"></i>
+              </div>
+              <div>
+                <div class="fw-bold text-dark" style="font-size: 0.95rem;">Bailey is Ready!</div>
+                <div class="text-muted" style="font-size: 0.8rem;">Golden Retriever • 2 yrs • Vaccinated</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Quick Category Filter Bar -->
+  <section class="py-4 bg-white border-bottom border-top">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div class="fw-bold text-dark d-flex align-items-center gap-2">
+          <i class="bi bi-funnel-fill text-primary"></i> Popular Categories:
+        </div>
+        <div class="filter-chip-group">
+          <a href="/pets?species=Dog" class="filter-chip">🐶 Dogs</a>
+          <a href="/pets?species=Cat" class="filter-chip">🐱 Cats</a>
+          <a href="/pets?species=Rabbit" class="filter-chip">🐰 Rabbits</a>
+          <a href="/pets?species=Bird" class="filter-chip">🦜 Birds</a>
+          <a href="/pets" class="filter-chip active">View All Companions</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Pets Section -->
+  <section class="py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+          <span class="text-uppercase fw-bold text-success" style="font-size: 0.85rem; letter-spacing: 0.1em;">Meet Our Guests</span>
+          <h2 class="mt-1">Pets Waiting For You</h2>
+        </div>
+        <a href="/pets" class="btn btn-outline-custom">View All <i class="bi bi-arrow-right"></i></a>
+      </div>
+
+      <div class="row g-4" id="featured-pets-grid">
+        <!-- Rendered dynamically via JS -->
+        <div class="col-12 text-center py-5">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="text-muted mt-2">Loading adorable companions...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Adoption Process (Workflow matches Activity Diagram) -->
+  <section class="py-5 bg-white border-top">
+    <div class="container">
+      <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="text-uppercase fw-bold text-warning" style="font-size: 0.85rem; letter-spacing: 0.1em;">Simple 4-Step Journey</span>
+        <h2 class="mt-1">How PawHaven Adoption Works</h2>
+        <p class="text-secondary">Our transparent, ethical adoption process ensures every animal finds their perfect lifelong match.</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="process-card">
+            <div class="process-number">1</div>
+            <h5 class="fw-bold mb-2">Browse & Select</h5>
+            <p class="text-secondary small">Explore pet profiles, health backgrounds, vaccine records, and temperament details online.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="process-card">
+            <div class="process-number">2</div>
+            <h5 class="fw-bold mb-2">Submit Application</h5>
+            <p class="text-secondary small">Fill out our structured questionnaire about your home environment, experience, and lifestyle.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="process-card">
+            <div class="process-number">3</div>
+            <h5 class="fw-bold mb-2">Staff Verification</h5>
+            <p class="text-secondary small">Our certified shelter team reviews your application for compatibility and issues an approval decision.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="process-card">
+            <div class="process-number">4</div>
+            <h5 class="fw-bold mb-2">Welcome Home!</h5>
+            <p class="text-secondary small">Receive instant notification, complete the adoption handover, and welcome your new best friend.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Adopt Section -->
+  <section class="py-5" style="background: linear-gradient(180deg, var(--light-bg) 0%, #ffffff 100%);">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <img src="/images/pets/cat-british.jpg" alt="Shelter Cat" class="img-fluid rounded-4 shadow-lg border border-white border-4">
+        </div>
+        <div class="col-lg-6">
+          <span class="text-uppercase fw-bold text-success" style="font-size: 0.85rem; letter-spacing: 0.1em;">Ethical Rescues</span>
+          <h2 class="mt-1 mb-3">Why Choose Adoption Over Buying?</h2>
+          <p class="text-secondary mb-4">By adopting from PawHaven, you directly save an animal's life, combat unethical breeding mills, and open up shelter space for another pet in dire need.</p>
+          
+          <div class="d-flex align-items-start gap-3 mb-3">
+            <div class="rounded-circle bg-success text-white p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; flex-shrink: 0;">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-1">Comprehensive Health Screenings</h6>
+              <p class="text-secondary small mb-0">Every pet is examined, vaccinated, dewormed, and microchipped before adoption.</p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start gap-3 mb-3">
+            <div class="rounded-circle bg-warning text-dark p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; flex-shrink: 0;">
+              <i class="bi bi-heart"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-1">Temperament & Behavior Matching</h6>
+              <p class="text-secondary small mb-0">We evaluate activity level and sociability to match you with a pet tailored to your living situation.</p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start gap-3">
+            <div class="rounded-circle bg-primary text-white p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; flex-shrink: 0;">
+              <i class="bi bi-headset"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-1">Lifelong Post-Adoption Support</h6>
+              <p class="text-secondary small mb-0">Our veterinary and behavioral specialists are always ready to answer any questions after adoption.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer-custom">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="navbar-brand-custom mb-3" style="color: #ffffff !important;">
+            <div class="brand-icon">
+              <i class="bi bi-heart-pulse-fill"></i>
+            </div>
+            <span>Paw<span style="color: var(--accent);">Haven</span></span>
+          </div>
+          <p class="text-secondary small pe-lg-4">
+            PawHaven is a non-profit pet welfare and adoption portal dedicated to saving abandoned animals and finding them loving lifelong homes.
+          </p>
+          <div class="d-flex gap-3 text-secondary">
+            <a href="#" class="text-secondary fs-5"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-secondary fs-5"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="text-secondary fs-5"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="text-secondary fs-5"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <h5>Quick Links</h5>
+          <a href="/pets" class="footer-link">Browse Pets</a>
+          <a href="/about" class="footer-link">About Shelter</a>
+          <a href="/contact" class="footer-link">Contact Us</a>
+          <a href="/login" class="footer-link">Adopter Login</a>
+          <a href="/admin" class="footer-link">Staff Portal</a>
+        </div>
+
+        <div class="col-6 col-lg-3">
+          <h5>Categories</h5>
+          <a href="/pets?species=Dog" class="footer-link">Dogs for Adoption</a>
+          <a href="/pets?species=Cat" class="footer-link">Cats for Adoption</a>
+          <a href="/pets?species=Rabbit" class="footer-link">Rabbits for Adoption</a>
+          <a href="/pets?species=Bird" class="footer-link">Birds for Adoption</a>
+        </div>
+
+        <div class="col-lg-3">
+          <h5>Shelter Center</h5>
+          <p class="small text-secondary mb-1"><i class="bi bi-geo-alt-fill text-accent me-2"></i>100 Animal Rescue Blvd, Suite 400</p>
+          <p class="small text-secondary mb-1"><i class="bi bi-telephone-fill text-accent me-2"></i>+1 (555) 019-2834</p>
+          <p class="small text-secondary mb-3"><i class="bi bi-envelope-fill text-accent me-2"></i>adoptions@pawhaven.org</p>
+          <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 small text-secondary">
+            <strong>Visiting Hours:</strong><br>
+            Mon – Sat: 9:00 AM – 6:00 PM<br>
+            Sunday: 10:00 AM – 4:00 PM
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom text-secondary">
+        <p class="mb-0">© 2026 PawHaven Pet Adoption Portal. Developed for Software Engineering Capstone Project.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- App JS -->
+  <script src="/js/app.js"></script>
+  <script>
+    // Fetch and display featured pets
+    async function loadFeaturedPets() {
+      const grid = document.getElementById('featured-pets-grid');
+      try {
+        const res = await App.fetchApi('/api/pets?status=Available');
+        if (res.data && res.data.length > 0) {
+          const featured = res.data.slice(0, 4);
+          grid.innerHTML = featured.map(pet => `
+            <div class="col-md-6 col-lg-3">
+              <div class="pet-card">
+                <div class="pet-card-image-wrap">
+                  <img src="${pet.image}" alt="${pet.name}" onerror="this.src='/images/pets/default.jpg'">
+                  <span class="pet-badge-status ${pet.status === 'Available' ? 'badge-available' : 'badge-adopted'}">
+                    ${pet.status}
+                  </span>
+                  <span class="pet-species-pill">
+                    ${pet.species}
+                  </span>
+                </div>
+                <div class="pet-card-body">
+                  <div class="pet-title">
+                    <span>${pet.name}</span>
+                    <span class="fs-6 text-muted"><i class="bi bi-gender-${pet.gender.toLowerCase()} text-primary"></i></span>
+                  </div>
+                  <div class="pet-breed">${pet.breed}</div>
+                  <div class="pet-meta-row">
+                    <span class="meta-chip"><i class="bi bi-calendar3"></i> ${pet.age} ${pet.age === 1 ? 'Year' : 'Years'}</span>
+                    <span class="meta-chip"><i class="bi bi-rulers"></i> ${pet.size}</span>
+                  </div>
+                  <p class="pet-description">${pet.description || 'Gentle companion seeking a caring family.'}</p>
+                  <a href="/pet-details?id=${pet.pet_id}" class="btn btn-outline-custom w-100 mt-auto">
+                    Meet ${pet.name} <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          `).join('');
+
+          // Update hero counters
+          const availCount = res.data.length;
+          const statPets = document.getElementById('hero-stat-pets');
+          if (statPets) statPets.innerText = `${availCount}+`;
+        } else {
+          grid.innerHTML = `<div class="col-12 text-center text-muted">No pets currently available. Check back soon!</div>`;
+        }
+      } catch (e) {
+        grid.innerHTML = `<div class="col-12 text-center text-danger">Failed to load pets. Please refresh the page.</div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadFeaturedPets);
+  </script>
+</body>
+</html>

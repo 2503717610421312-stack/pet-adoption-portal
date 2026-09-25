@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shelter Administrator Portal | PawHaven</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-light">
+
+  <!-- Admin Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 sticky-top shadow-sm">
+    <div class="container-fluid px-lg-5">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="/admin">
+        <div class="p-1 px-2 rounded-3 bg-warning text-dark fw-bold small">
+          <i class="bi bi-shield-lock-fill"></i> ADMIN
+        </div>
+        <span>Paw<span class="text-warning">Haven</span> Operations Center</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="adminNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+          <li class="nav-item">
+            <a class="nav-link text-white-50 active fw-semibold" href="#tab-stats" data-bs-toggle="tab"><i class="bi bi-speedometer2 me-1"></i>Overview</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white-50 fw-semibold position-relative" href="#tab-requests" data-bs-toggle="tab">
+              <i class="bi bi-inbox-fill me-1"></i>Adoption Requests
+              <span id="admin-pending-badge" class="badge rounded-pill bg-warning text-dark ms-1" style="display:none;">0</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white-50 fw-semibold" href="#tab-pets" data-bs-toggle="tab"><i class="bi bi-heart-pulse-fill me-1"></i>Pet Inventory</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white-50 fw-semibold" href="#tab-users" data-bs-toggle="tab"><i class="bi bi-people-fill me-1"></i>Adopters Directory</a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-3">
+          <a href="/" target="_blank" class="btn btn-outline-light btn-sm rounded-pill px-3">
+            <i class="bi bi-box-arrow-up-right me-1"></i> Live Site
+          </a>
+          <span class="text-white-50 small" id="admin-user-display">Administrator</span>
+          <button class="btn btn-danger btn-sm rounded-pill px-3" onclick="App.logout()">
+            <i class="bi bi-box-arrow-right me-1"></i> Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Admin Main Container -->
+  <div class="container-fluid px-lg-5 py-4">
+
+    <!-- KPI Metrics Row -->
+    <div class="row g-3 mb-4">
+      <div class="col-sm-6 col-xl-2 col-md-4">
+        <div class="dash-kpi-card p-3">
+          <div class="kpi-icon-wrap kpi-primary" style="width: 44px; height: 44px; font-size: 1.25rem;">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div>
+            <div class="kpi-value fs-4" id="kpi-users">0</div>
+            <div class="kpi-title" style="font-size: 0.75rem;">Registered Users</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-2 col-md-4">
+        <div class="dash-kpi-card p-3">
+          <div class="kpi-icon-wrap kpi-info" style="width: 44px; height: 44px; font-size: 1.25rem;">
+            <i class="bi bi-grid-fill"></i>
+          </div>
+          <div>
+            <div class="kpi-value fs-4" id="kpi-total-pets">0</div>
+            <div class="kpi-title" style="font-size: 0.75rem;">Total Pets</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-2 col-md-4">
+        <div class="dash-kpi-card p-3">
+          <div class="kpi-icon-wrap kpi-success" style="width: 44px; height: 44px; font-size: 1.25rem;">
+            <i class="bi bi-check2-circle"></i>
+          </div>
+          <div>
+            <div class="kpi-value fs-4 text-success" id="kpi-avail-pets">0</div>
+            <div class="kpi-title" style="font-size: 0.75rem;">Available Pets</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-2 col-md-4">
+        <div class="dash-kpi-card p-3">
+          <div class="kpi-icon-wrap kpi-secondary" style="width: 44px; height: 44px; font-size: 1.25rem; background: #e2e8f0; color: #475569;">
+            <i class="bi bi-house-heart-fill"></i>
+          </div>
+          <div>
+            <div class="kpi-value fs-4" id="kpi-adopted-pets">0</div>
+            <div class="kpi-title" style="font-size: 0.75rem;">Adopted Pets</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-2 col-md-4">
+        <div class="dash-kpi-card p-3">
+          <div class="kpi-icon-wrap kpi-accent" style="width: 44px; height: 44px; font-size: 1.25rem;">
+            <i class="bi bi-hourglass-top"></i>
+          </div>
+          <div>
+            <div class="kpi-value fs-4 text-warning" id="kpi-pending-reqs">0</div>
+            <div class="kpi-title" style="font-size: 0.75rem;">Pending Requests</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-2 col-md-4">
+        <div class="dash-kpi-card p-3">
+          <div class="kpi-icon-wrap kpi-success" style="width: 44px; height: 44px; font-size: 1.25rem;">
+            <i class="bi bi-award-fill"></i>
+          </div>
+          <div>
+            <div class="kpi-value fs-4 text-success" id="kpi-approved-apps">0</div>
+            <div class="kpi-title" style="font-size: 0.75rem;">Adoptions Finalized</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Navigation Tabs Content -->
+    <div class="tab-content" id="adminTabsContent">
+      
+      <!-- TAB 1: Overview & Quick Actions -->
+      <div class="tab-pane fade show active" id="tab-stats">
+        <div class="row g-4">
+          
+          <!-- Recent Applications Panel -->
+          <div class="col-lg-8">
+            <div class="glass-card p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0">Recent Adoption Applications</h5>
+                <a href="#tab-requests" data-bs-toggle="tab" class="btn btn-sm btn-outline-custom">View All Requests</a>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="table-light small">
+                    <tr>
+                      <th>Applicant</th>
+                      <th>Pet Target</th>
+                      <th>Applied On</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recent-apps-table">
+                    <tr><td colspan="5" class="text-center py-3 text-muted">Loading recent applications...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions & Species Breakdown -->
+          <div class="col-lg-4">
+            <!-- Quick Actions Card -->
+            <div class="glass-card p-4 mb-4">
+              <h5 class="fw-bold mb-3">Quick Operations</h5>
+              <div class="d-grid gap-2">
+                <button class="btn btn-primary-custom py-2" onclick="openAddPetModal()">
+                  <i class="bi bi-plus-circle-fill"></i> Add New Pet Profile
+                </button>
+                <a href="#tab-requests" data-bs-toggle="tab" class="btn btn-outline-custom py-2">
+                  <i class="bi bi-clipboard2-check"></i> Review Pending Requests
+                </a>
+              </div>
+            </div>
+
+            <!-- Species Distribution Card -->
+            <div class="glass-card p-4">
+              <h5 class="fw-bold mb-3">Rescue Distribution</h5>
+              <div id="species-breakdown-list">
+                <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 2: Adoption Requests Management -->
+      <div class="tab-pane fade" id="tab-requests">
+        <div class="glass-card p-4">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <div>
+              <h5 class="fw-bold mb-1">Adoption Requests Management</h5>
+              <p class="text-secondary small mb-0">Review applicant qualifications, family circumstances, and make Approve/Reject determinations.</p>
+            </div>
+            <div class="d-flex gap-2">
+              <select class="form-select form-select-sm" id="req-filter-status" onchange="loadAllApplications()" style="width: 140px;">
+                <option value="All">All Statuses</option>
+                <option value="Pending" selected>Pending Only</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+              </select>
+              <button class="btn btn-sm btn-outline-secondary" onclick="loadAllApplications()">
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light small text-uppercase">
+                <tr>
+                  <th>App #</th>
+                  <th>Applicant</th>
+                  <th>Contact Info</th>
+                  <th>Target Pet</th>
+                  <th>Living Environment</th>
+                  <th>Status</th>
+                  <th>Decision Actions</th>
+                </tr>
+              </thead>
+              <tbody id="all-requests-table">
+                <tr><td colspan="7" class="text-center py-4 text-muted">Loading requests...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: Pet Inventory Management -->
+      <div class="tab-pane fade" id="tab-pets">
+        <div class="glass-card p-4">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <div>
+              <h5 class="fw-bold mb-1">Shelter Pet Inventory</h5>
+              <p class="text-secondary small mb-0">Manage animals, update health records, edit bios, or add new rescued arrivals.</p>
+            </div>
+            <button class="btn btn-primary-custom" onclick="openAddPetModal()">
+              <i class="bi bi-plus-lg"></i> Add New Pet
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light small text-uppercase">
+                <tr>
+                  <th>Pet</th>
+                  <th>Species / Breed</th>
+                  <th>Age / Gender</th>
+                  <th>Size</th>
+                  <th>Medical Status</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-pets-table">
+                <tr><td colspan="7" class="text-center py-4 text-muted">Loading pets inventory...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: Adopters Directory -->
+      <div class="tab-pane fade" id="tab-users">
+        <div class="glass-card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="fw-bold mb-1">Registered Adopters Directory</h5>
+              <p class="text-secondary small mb-0">Registered accounts and historical adoption activity.</p>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary" onclick="loadRegisteredUsers()">
+              <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light small text-uppercase">
+                <tr>
+                  <th>Adopter Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Address</th>
+                  <th>Role</th>
+                  <th>Applications</th>
+                  <th>Registered</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-table">
+                <tr><td colspan="7" class="text-center py-4 text-muted">Loading users directory...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Review Application Modal (Approve / Reject) -->
+  <div class="modal fade" id="reviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content modal-content-custom">
+        <div class="modal-header modal-header-custom">
+          <h5 class="modal-title fw-bold">Review Adoption Application #<span id="rev-app-id"></span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4" id="rev-modal-body">
+          <!-- Dynamically populated -->
+        </div>
+        <div class="modal-footer bg-light d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <div class="d-flex gap-2" id="rev-actions-container">
+            <!-- Approve & Reject buttons populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add / Edit Pet Modal -->
+  <div class="modal fade" id="petFormModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content modal-content-custom">
+        <div class="modal-header modal-header-custom">
+          <h5 class="modal-title fw-bold" id="petModalTitle">Add New Rescued Pet</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="pet-admin-form" enctype="multipart/form-data">
+          <input type="hidden" id="pet-form-id" value="">
+          <div class="modal-body p-4">
+            <div class="row g-3">
+              
+              <div class="col-md-6">
+                <label class="form-label-custom">Pet Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-custom" id="pet-form-name" required placeholder="e.g. Copper">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">Species <span class="text-danger">*</span></label>
+                <select class="form-select form-select-custom" id="pet-form-species" required>
+                  <option value="Dog">Dog</option>
+                  <option value="Cat">Cat</option>
+                  <option value="Rabbit">Rabbit</option>
+                  <option value="Bird">Bird</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">Breed <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-custom" id="pet-form-breed" required placeholder="e.g. Labrador Retriever">
+              </div>
+
+              <div class="col-md-3 col-6">
+                <label class="form-label-custom">Age (Years) <span class="text-danger">*</span></label>
+                <input type="number" class="form-control form-control-custom" id="pet-form-age" min="0" max="25" value="1" required>
+              </div>
+
+              <div class="col-md-3 col-6">
+                <label class="form-label-custom">Gender <span class="text-danger">*</span></label>
+                <select class="form-select form-select-custom" id="pet-form-gender" required>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label-custom">Size <span class="text-danger">*</span></label>
+                <select class="form-select form-select-custom" id="pet-form-size" required>
+                  <option value="Small">Small</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="Large">Large</option>
+                </select>
+              </div>
+
+              <div class="col-md-8">
+                <label class="form-label-custom">Health & Vaccine Status <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-custom" id="pet-form-health" required placeholder="e.g. Fully Vaccinated, Neutered, Microchipped">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">Pet Image File (Upload)</label>
+                <input type="file" class="form-control form-control-custom" id="pet-form-file" accept="image/*">
+                <div class="form-text small">Upload JPEG, PNG, or WEBP image (Multer).</div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">Or Image URL</label>
+                <input type="text" class="form-control form-control-custom" id="pet-form-imgurl" placeholder="/images/pets/dog-golden.jpg">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">Availability Status</label>
+                <select class="form-select form-select-custom" id="pet-form-status">
+                  <option value="Available">Available</option>
+                  <option value="Adopted">Adopted</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label-custom">Description & Temperament</label>
+                <textarea class="form-control form-control-custom" id="pet-form-desc" rows="3" placeholder="Personality, history, behavior around children/pets..."></textarea>
+              </div>
+
+            </div>
+          </div>
+          <div class="modal-footer bg-light">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary-custom" id="pet-save-btn">
+              <i class="bi bi-cloud-arrow-up-fill me-1"></i> Save Pet Profile
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    // Strict Guard: Admin role required
+    if (!App.isAuthenticated() || !App.isAdmin()) {
+      App.showToast('Administrator privileges required.', 'danger');
+      setTimeout(() => {
+        window.location.href = '/login?role=admin&redirect=/admin';
+      }, 500);
+    }
+
+    let allApplications = [];
+    let allPets = [];
+    let petModalInstance = null;
+    let reviewModalInstance = null;
+
+    async function initAdminDashboard() {
+      const user = App.getUser();
+      if (user) {
+        document.getElementById('admin-user-display').innerText = user.fullName;
+      }
+
+      petModalInstance = new bootstrap.Modal(document.getElementById('petFormModal'));
+      reviewModalInstance = new bootstrap.Modal(document.getElementById('reviewModal'));
+
+      await Promise.all([
+        loadStats(),
+        loadAllApplications(),
+        loadAdminPets(),
+        loadRegisteredUsers()
+      ]);
+    }
+
+    async function loadStats() {
+      try {
+        const res = await App.fetchApi('/api/admin/stats');
+        const s = res.stats;
+
+        document.getElementById('kpi-users').innerText = s.totalUsers;
+        document.getElementById('kpi-total-pets').innerText = s.totalPets;
+        document.getElementById('kpi-avail-pets').innerText = s.availablePets;
+        document.getElementById('kpi-adopted-pets').innerText = s.adoptedPets;
+        document.getElementById('kpi-pending-reqs').innerText = s.pendingApplications;
+        document.getElementById('kpi-approved-apps').innerText = s.approvedApplications;
+
+        const badge = document.getElementById('admin-pending-badge');
+        if (s.pendingApplications > 0) {
+          badge.innerText = s.pendingApplications;
+          badge.style.display = 'inline-block';
+        } else {
+          badge.style.display = 'none';
+        }
+
+        // Render Recent Applications on Overview tab
+        const recentTable = document.getElementById('recent-apps-table');
+        if (res.recentApplications && res.recentApplications.length > 0) {
+          recentTable.innerHTML = res.recentApplications.map(a => `
+            <tr>
+              <td>
+                <div class="fw-bold">${a.applicant_name}</div>
+                <div class="text-muted small">${a.applicant_email}</div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <img src="${a.pet_image}" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;" onerror="this.src='/images/pets/default.jpg'">
+                  <div>${a.pet_name} <span class="badge bg-light text-dark border small">${a.pet_species}</span></div>
+                </div>
+              </td>
+              <td class="small text-muted">${new Date(a.applied_at).toLocaleDateString()}</td>
+              <td>
+                <span class="badge ${a.status === 'Approved' ? 'bg-success' : a.status === 'Pending' ? 'bg-warning text-dark' : 'bg-danger'}">${a.status}</span>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary py-1" onclick="openReviewModalById(${a.application_id})">Review</button>
+              </td>
+            </tr>
+          `).join('');
+        } else {
+          recentTable.innerHTML = `<tr><td colspan="5" class="text-center py-3 text-muted">No applications found.</td></tr>`;
+        }
+
+        // Render Species Breakdown
+        const breakdown = document.getElementById('species-breakdown-list');
+        if (res.speciesDistribution) {
+          breakdown.innerHTML = res.speciesDistribution.map(sp => `
+            <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+              <span class="fw-medium">${sp.species}</span>
+              <span class="badge bg-primary rounded-pill">${sp.count}</span>
+            </div>
+          `).join('');
+        }
+
+      } catch (err) {
+        console.error('Failed to load stats:', err);
+      }
+    }
+
+    async function loadAllApplications() {
+      const statusFilter = document.getElementById('req-filter-status').value;
+      const tbody = document.getElementById('all-requests-table');
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">Loading requests...</td></tr>`;
+
+      try {
+        const res = await App.fetchApi(`/api/applications?status=${statusFilter}`);
+        allApplications = res.data || [];
+
+        if (allApplications.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No ${statusFilter === 'All' ? '' : statusFilter.toLowerCase()} adoption applications found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = allApplications.map((app, idx) => `
+          <tr>
+            <td><strong>#${app.application_id}</strong></td>
+            <td>
+              <div class="fw-bold">${app.applicant_name}</div>
+              <div class="small text-muted">${app.occupation || 'N/A'}</div>
+            </td>
+            <td>
+              <div class="small"><i class="bi bi-envelope text-muted"></i> ${app.applicant_email}</div>
+              <div class="small text-muted"><i class="bi bi-telephone text-muted"></i> ${app.applicant_phone || 'N/A'}</div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <img src="${app.pet_image}" class="rounded-2" style="width: 38px; height: 38px; object-fit: cover;" onerror="this.src='/images/pets/default.jpg'">
+                <div>
+                  <div class="fw-bold">${app.pet_name}</div>
+                  <div class="small text-muted">${app.pet_breed} (${app.pet_current_status})</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="small text-truncate" style="max-width: 180px;">${app.house_type || 'N/A'}</div>
+              <div class="small text-muted">${app.family_members} member(s)</div>
+            </td>
+            <td>
+              <span class="badge ${app.status === 'Approved' ? 'bg-success' : app.status === 'Pending' ? 'bg-warning text-dark' : 'bg-danger'} p-2">
+                ${app.status}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" onclick="openReviewModalByIndex(${idx})">
+                <i class="bi bi-search"></i> Inspect & Decide
+              </button>
+            </td>
+          </tr>
+        `).join('');
+
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">${err.message}</td></tr>`;
+      }
+    }
+
+    function openReviewModalByIndex(index) {
+      const app = allApplications[index];
+      populateReviewModal(app);
+    }
+
+    async function openReviewModalById(id) {
+      // Find or fetch application
+      let app = allApplications.find(a => a.application_id === id);
+      if (!app) {
+        const res = await App.fetchApi(`/api/applications?status=All`);
+        allApplications = res.data || [];
+        app = allApplications.find(a => a.application_id === id);
+      }
+      if (app) populateReviewModal(app);
+    }
+
+    function populateReviewModal(app) {
+      if (!app) return;
+      document.getElementById('rev-app-id').innerText = app.application_id;
+
+      document.getElementById('rev-modal-body').innerHTML = `
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3">
+              <h6 class="fw-bold mb-2 text-primary"><i class="bi bi-person-fill"></i> Applicant Information</h6>
+              <div class="small mb-1"><strong>Name:</strong> ${app.applicant_name}</div>
+              <div class="small mb-1"><strong>Email:</strong> ${app.applicant_email}</div>
+              <div class="small mb-1"><strong>Phone:</strong> ${app.applicant_phone || 'N/A'}</div>
+              <div class="small mb-1"><strong>Address:</strong> ${app.applicant_address || 'N/A'}</div>
+              <div class="small mb-1"><strong>Occupation:</strong> ${app.occupation}</div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3">
+              <h6 class="fw-bold mb-2 text-primary"><i class="bi bi-heart-pulse-fill"></i> Pet Information</h6>
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <img src="${app.pet_image}" class="rounded-3" style="width: 50px; height: 50px; object-fit: cover;" onerror="this.src='/images/pets/default.jpg'">
+                <div>
+                  <div class="fw-bold">${app.pet_name} (${app.pet_breed})</div>
+                  <div class="small text-muted">${app.pet_species} • Current Status: <strong>${app.pet_current_status}</strong></div>
+                </div>
+              </div>
+              <div class="small mb-1"><strong>Application Date:</strong> ${new Date(app.applied_at).toLocaleString()}</div>
+              <div class="small"><strong>Current Status:</strong> <span class="badge ${app.status === 'Approved' ? 'bg-success' : app.status === 'Pending' ? 'bg-warning text-dark' : 'bg-danger'}">${app.status}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 border rounded-3 mb-3">
+          <h6 class="fw-bold text-dark mb-2">Housing & Family Context</h6>
+          <div class="row g-2 small">
+            <div class="col-md-6"><strong>Residence Type:</strong> ${app.house_type}</div>
+            <div class="col-md-6"><strong>Household Count:</strong> ${app.family_members} member(s)</div>
+          </div>
+        </div>
+
+        <div class="p-3 border rounded-3 mb-3">
+          <h6 class="fw-bold text-dark mb-2">Prior Pet Ownership Experience</h6>
+          <p class="small text-secondary mb-0">${app.pet_experience || 'None reported'}</p>
+        </div>
+
+        <div class="p-3 border rounded-3 mb-3">
+          <h6 class="fw-bold text-dark mb-2">Applicant's Reason for Adoption</h6>
+          <p class="small text-secondary mb-0">${app.reason || 'None provided'}</p>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label-custom">Reviewer Feedback Notes</label>
+          <textarea class="form-control form-control-custom" id="rev-notes-input" rows="2" placeholder="e.g. Verified backyard fencing. Applicant has solid retriever experience.">${app.admin_notes || ''}</textarea>
+          <div class="form-text small">Notes will be recorded in the database and visible to the applicant.</div>
+        </div>
+      `;
+
+      // Action buttons
+      const container = document.getElementById('rev-actions-container');
+      if (app.status === 'Pending') {
+        container.innerHTML = `
+          <button type="button" class="btn btn-danger" onclick="decideApplication(${app.application_id}, 'Rejected')">
+            <i class="bi bi-x-circle-fill me-1"></i> Reject Application
+          </button>
+          <button type="button" class="btn btn-success" onclick="decideApplication(${app.application_id}, 'Approved')">
+            <i class="bi bi-check-circle-fill me-1"></i> Approve & Mark Pet Adopted
+          </button>
+        `;
+      } else {
+        container.innerHTML = `
+          <button type="button" class="btn btn-outline-warning" onclick="decideApplication(${app.application_id}, 'Pending')">
+            Reopen (Set Pending)
+          </button>
+          <button type="button" class="btn ${app.status === 'Approved' ? 'btn-danger' : 'btn-success'}" onclick="decideApplication(${app.application_id}, '${app.status === 'Approved' ? 'Rejected' : 'Approved'}')">
+            Switch to ${app.status === 'Approved' ? 'Rejected' : 'Approved'}
+          </button>
+        `;
+      }
+
+      reviewModalInstance.show();
+    }
+
+    async function decideApplication(appId, status) {
+      const notes = document.getElementById('rev-notes-input').value.trim();
+      try {
+        const res = await App.fetchApi(`/api/applications/${appId}/status`, {
+          method: 'PUT',
+          body: JSON.stringify({ status, admin_notes: notes })
+        });
+
+        App.showToast(res.message || `Application updated to ${status}.`, 'success');
+        reviewModalInstance.hide();
+        await Promise.all([loadStats(), loadAllApplications(), loadAdminPets()]);
+      } catch (err) {
+        App.showToast(err.message || 'Error updating application status.', 'danger');
+      }
+    }
+
+    async function loadAdminPets() {
+      const tbody = document.getElementById('admin-pets-table');
+      try {
+        const res = await App.fetchApi('/api/pets?sort=name_asc');
+        allPets = res.data || [];
+
+        tbody.innerHTML = allPets.map(pet => `
+          <tr>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <img src="${pet.image}" class="rounded-2" style="width: 44px; height: 44px; object-fit: cover;" onerror="this.src='/images/pets/default.jpg'">
+                <div class="fw-bold">${pet.name}</div>
+              </div>
+            </td>
+            <td>
+              <div>${pet.species}</div>
+              <div class="small text-muted">${pet.breed}</div>
+            </td>
+            <td>
+              <div>${pet.age} ${pet.age === 1 ? 'Year' : 'Years'}</div>
+              <div class="small text-muted">${pet.gender}</div>
+            </td>
+            <td><span class="badge bg-light text-dark border">${pet.size}</span></td>
+            <td class="small text-truncate" style="max-width: 200px;">${pet.health_status}</td>
+            <td>
+              <span class="badge ${pet.status === 'Available' ? 'badge-available' : 'badge-adopted'} p-2">
+                ${pet.status}
+              </span>
+            </td>
+            <td>
+              <div class="d-flex gap-1">
+                <button class="btn btn-sm btn-outline-secondary" onclick="openEditPetModal(${pet.pet_id})">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deletePet(${pet.pet_id}, '${pet.name}')">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">${err.message}</td></tr>`;
+      }
+    }
+
+    function openAddPetModal() {
+      document.getElementById('pet-admin-form').reset();
+      document.getElementById('pet-form-id').value = '';
+      document.getElementById('petModalTitle').innerText = 'Add New Rescued Pet';
+      petModalInstance.show();
+    }
+
+    function openEditPetModal(id) {
+      const pet = allPets.find(p => p.pet_id === id);
+      if (!pet) return;
+
+      document.getElementById('pet-form-id').value = pet.pet_id;
+      document.getElementById('pet-form-name').value = pet.name;
+      document.getElementById('pet-form-species').value = pet.species;
+      document.getElementById('pet-form-breed').value = pet.breed;
+      document.getElementById('pet-form-age').value = pet.age;
+      document.getElementById('pet-form-gender').value = pet.gender;
+      document.getElementById('pet-form-size').value = pet.size;
+      document.getElementById('pet-form-health').value = pet.health_status;
+      document.getElementById('pet-form-imgurl').value = pet.image;
+      document.getElementById('pet-form-status').value = pet.status;
+      document.getElementById('pet-form-desc').value = pet.description || '';
+
+      document.getElementById('petModalTitle').innerText = `Edit Pet: ${pet.name}`;
+      petModalInstance.show();
+    }
+
+    document.getElementById('pet-admin-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const btn = document.getElementById('pet-save-btn');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Saving...`;
+
+      const id = document.getElementById('pet-form-id').value;
+      const formData = new FormData();
+      formData.append('name', document.getElementById('pet-form-name').value.trim());
+      formData.append('species', document.getElementById('pet-form-species').value);
+      formData.append('breed', document.getElementById('pet-form-breed').value.trim());
+      formData.append('age', document.getElementById('pet-form-age').value);
+      formData.append('gender', document.getElementById('pet-form-gender').value);
+      formData.append('size', document.getElementById('pet-form-size').value);
+      formData.append('health_status', document.getElementById('pet-form-health').value.trim());
+      formData.append('status', document.getElementById('pet-form-status').value);
+      formData.append('description', document.getElementById('pet-form-desc').value.trim());
+
+      const fileInput = document.getElementById('pet-form-file');
+      if (fileInput.files.length > 0) {
+        formData.append('image', fileInput.files[0]);
+      } else {
+        formData.append('image_url', document.getElementById('pet-form-imgurl').value.trim());
+      }
+
+      try {
+        const url = id ? `/api/pets/${id}` : '/api/pets';
+        const method = id ? 'PUT' : 'POST';
+
+        await App.fetchApi(url, {
+          method,
+          body: formData
+        });
+
+        App.showToast(`Pet ${id ? 'updated' : 'added'} successfully!`, 'success');
+        petModalInstance.hide();
+        await Promise.all([loadStats(), loadAdminPets()]);
+      } catch (err) {
+        App.showToast(err.message || 'Error saving pet profile.', 'danger');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="bi bi-cloud-arrow-up-fill me-1"></i> Save Pet Profile`;
+      }
+    });
+
+    async function deletePet(id, name) {
+      if (!confirm(`Are you sure you want to remove pet profile for "${name}"? This action cannot be undone.`)) {
+        return;
+      }
+
+      try {
+        await App.fetchApi(`/api/pets/${id}`, { method: 'DELETE' });
+        App.showToast(`Pet "${name}" removed.`, 'success');
+        await Promise.all([loadStats(), loadAdminPets(), loadAllApplications()]);
+      } catch (err) {
+        App.showToast(err.message || 'Error deleting pet.', 'danger');
+      }
+    }
+
+    async function loadRegisteredUsers() {
+      const tbody = document.getElementById('admin-users-table');
+      try {
+        const res = await App.fetchApi('/api/admin/users');
+        const users = res.data || [];
+
+        tbody.innerHTML = users.map(u => `
+          <tr>
+            <td>
+              <div class="fw-bold">${u.full_name}</div>
+              <div class="small text-muted">ID #${u.user_id}</div>
+            </td>
+            <td>${u.email}</td>
+            <td>${u.phone || 'N/A'}</td>
+            <td class="small text-truncate" style="max-width: 200px;">${u.address || 'N/A'}</td>
+            <td>
+              <span class="badge ${u.role === 'Admin' ? 'bg-warning text-dark' : 'bg-primary'}">${u.role}</span>
+            </td>
+            <td>
+              <span class="fw-bold">${u.total_applications}</span>
+              ${u.approved_adoptions > 0 ? `<span class="badge bg-success ms-1">${u.approved_adoptions} adopted</span>` : ''}
+            </td>
+            <td class="small text-muted">${new Date(u.created_at).toLocaleDateString()}</td>
+          </tr>
+        `).join('');
+
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">${err.message}</td></tr>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initAdminDashboard);
+  </script>
+</body>
+</html>
